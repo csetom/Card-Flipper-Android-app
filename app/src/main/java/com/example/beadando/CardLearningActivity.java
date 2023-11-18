@@ -8,39 +8,47 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.beadando.Cards.CardChooser;
 import com.example.beadando.Cards.CardSide;
 import com.example.beadando.Cards.LearningCard;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Vector;
 
 public class CardLearningActivity extends AppCompatActivity {
-    private  List<LearningCard> cards= new Vector<LearningCard>();
+    private Vector<LearningCard> cards= new Vector<LearningCard>();
     private  TextView cardText;
     private  LearningCard shownCard;
-    private  Integer index=0;
     private CardSide side;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_learning);
         Log.d("info","Create Activity");
-        cards.add(new LearningCard("Alma","Barack",0));
-        cards.add(new LearningCard("Akorte","Bkorte",0));
-        side=CardSide.A;
 
+        cards.add(new LearningCard("0","A",0.1));
+        cards.add(new LearningCard("1","B",0.2));
+        cards.add(new LearningCard("2","C",0.3));
+        cards.add(new LearningCard("3","D",0.4));
+        cards.add(new LearningCard("4","E",0.5));
+        cards.add(new LearningCard("5","F",0.6));
+
+        side=CardSide.A;
         cardText = (TextView) findViewById(R.id.cardText);
-        shownCard= cards.get(0);
+       // cardChooser = new CardChooser(cards);
+        shownCard= cards.firstElement();
         try {
             cardText.setText(shownCard.getSide(side));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Button flipBtn= (Button)findViewById(R.id.Flipbtn);
         Button skipBtn= (Button)findViewById(R.id.SkipBtn);
 
-        flipBtn.setOnClickListener(new View.OnClickListener() {
+        cardText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -53,27 +61,18 @@ public class CardLearningActivity extends AppCompatActivity {
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (index<cards.size()-1){
-                    index++;
-                } else {
-                    index = 0;
-                }
-                side=CardSide.A; // TODO: megcsinalni, hogy legyen default side.
-                shownCard=cards.get(index);
                 try {
-                    cardText.setText(shownCard.getSide(side));
-                } catch (Exception e) {
+                    skipTheCard();
+                 } catch (Exception e) {
                     throw new RuntimeException(e);
-                }
+                 }
             }
         });
-
-
 
         // Log.d("Activity on Create","LearningCard");
     }
 
-    public void flipTheCard() throws Exception {
+    private void flipTheCard() throws Exception {
         switch (side){
             case A:
                 side=CardSide.B;
@@ -81,6 +80,14 @@ public class CardLearningActivity extends AppCompatActivity {
             case B:
                 side=CardSide.A;
         }
+        cardText.setText(shownCard.getSide(side));
+    }
+
+    private void skipTheCard() throws Exception {
+        cards.remove(shownCard);
+        cards.add(shownCard);
+        shownCard=cards.firstElement();
+        side=CardSide.A; // TODO: megcsinalni, hogy legyen default side.
         cardText.setText(shownCard.getSide(side));
     }
 }

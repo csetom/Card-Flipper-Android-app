@@ -3,10 +3,10 @@ package com.example.beadando.Cards;
 public class LearningCard {
     private String ASide;
     private String BSide;
-    private float knowledge; /// 0 to 1, its a percent
+    private double knowledge; /// 0 to 1, its a percent
 
 
-    public LearningCard(String ASide, String BSide, float knowledge) {
+    public LearningCard(String ASide, String BSide, double knowledge) {
         this.ASide = ASide;
         this.BSide = BSide;
         this.knowledge = knowledge;
@@ -33,7 +33,7 @@ public class LearningCard {
         this.knowledge = knowledge;
     }
 
-    public float getKnowledge() {
+    public double getKnowledge() {
         return knowledge;
     }
 

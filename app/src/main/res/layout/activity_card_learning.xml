@@ -7,37 +7,42 @@
     tools:context=".CardLearningActivity">
 
     <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="145dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="176dp"
+        tools:layout_editor_absoluteY="586dp">
 
-        <Button
-            android:id="@+id/Flipbtn"
-            android:layout_width="175dp"
-            android:layout_height="wrap_content"
-            android:onClick="flipTheCard"
-            android:text="@string/FlipBtnText" />
+        <TextView
+            android:id="@+id/cardText"
+            android:layout_width="match_parent"
+            android:layout_height="550dp"
+            android:layout_margin="15dp"
+            android:layout_marginTop="176dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="Pelda Text"
+            android:textAlignment="gravity"
 
-        <Button
-            android:id="@+id/SkipBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/SkipBtnText" />
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeMaxTextSize="64sp"
+            android:autoSizeStepGranularity="2sp"
+            />
+
+        <LinearLayout
+            android:layout_width="409dp"
+            android:layout_height="145dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/SkipBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/SkipBtnText" />
+
+        </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/cardText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="165dp"
-        android:layout_marginTop="99dp"
-        android:layout_marginEnd="188dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
