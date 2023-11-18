@@ -2,4 +2,6 @@
     <string name="app_name">Beadando</string>
     <string name="FlipBtnText">Flip</string>
     <string name="SkipBtnText">Skip</string>
+    <string name="StartLearningBtnText">Start Learning</string>
+
 </resources>
