@@ -36,4 +36,14 @@ public class LearningCard {
     public float getKnowledge() {
         return knowledge;
     }
+
+    public String getSide(CardSide side) throws Exception {
+        switch (side){
+            case A:
+                return getASide();
+            case B:
+                return getBSide();
+        };
+        throw new Exception("There is no other sides");
+    }
 }
