@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Beadando</string>
+    <string name="FlipBtnText">Flip</string>
+    <string name="SkipBtnText">Skip</string>
+</resources>
