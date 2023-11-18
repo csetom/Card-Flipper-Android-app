@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.example.beadando.Cards.CardSide;
@@ -32,8 +34,8 @@ public class CardLearningActivity extends AppCompatActivity {
         setContentView(R.layout.activity_card_learning);
         Log.d("info","Create Activity");
 
-        cards.add(new LearningCard("0","A",0.1));
-        cards.add(new LearningCard("1","B",0.2));
+        cards.add(new LearningCard("0qwe","asdasA",0.1));
+        cards.add(new LearningCard("1asd","asdB",0.2));
         cards.add(new LearningCard("2","C",0.3));
         cards.add(new LearningCard("3","D",0.4));
         cards.add(new LearningCard("4","E",0.5));
@@ -64,16 +66,58 @@ public class CardLearningActivity extends AppCompatActivity {
         });
 
     }
+    private void flipTheCard() {
+        // Load forward and backward animations from XML
+        Animation flipForward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.flip_forward);
+        Animation flipBackward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.flip_backward);
 
-    private void flipTheCard() throws Exception {
-        switch (side){
-            case A:
-                side=CardSide.B;
-            break;
-            case B:
-                side=CardSide.A;
+
+        // Start the forward animation
+        // Set up an AnimatorListener to start the backward animation after the forward animation completes
+        flipForward.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                switch (side){
+                    case A:
+                        side=CardSide.B;
+                        break;
+                    case B:
+                        side=CardSide.A;
+                };
+                updateTextView();
+                cardText.startAnimation(flipBackward);
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        cardText.startAnimation(flipForward);
+
+    }
+
+    private void updateTextView() {
+        // Set the text based on the currently visible side of the card
+        try {
+            cardText.setText(shownCard.getSide(side));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        cardText.setText(shownCard.getSide(side));
+
+
+        // Reset the alpha to fully opaque
+        cardText.setAlpha(1f);
+
+        // Reset the scale to the original size
+        cardText.setScaleX(1f);
+        cardText.setScaleY(1f);
     }
 
     private void skipTheCard() throws Exception {
@@ -106,7 +150,7 @@ public class CardLearningActivity extends AppCompatActivity {
         } else {
             shownCard = cards.firstElement();
             side = CardSide.A; // TODO: megcsinalni, hogy legyen default side.
-            cardText.setText(shownCard.getSide(side));
+            updateTextView();
         }
     }
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -132,7 +176,7 @@ public class CardLearningActivity extends AppCompatActivity {
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             float distanceX = e2.getX() - e1.getX();
             float distanceY = e2.getY() - e1.getY();
-
+            if (!cardText.getAnimation().hasEnded()) return false;
             if (Math.abs(distanceX) > Math.abs(distanceY)
                     && Math.abs(distanceX) > SWIPE_THRESHOLD
                     && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
