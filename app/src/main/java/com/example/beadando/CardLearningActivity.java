@@ -1,29 +1,31 @@
 package com.example.beadando;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.beadando.Cards.CardChooser;
 import com.example.beadando.Cards.CardSide;
 import com.example.beadando.Cards.LearningCard;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Vector;
 
 public class CardLearningActivity extends AppCompatActivity {
     private Vector<LearningCard> cards= new Vector<LearningCard>();
-    private  TextView cardText;
+    private  TextView cardText,goodCardNumber,badCardNumber;
     private  LearningCard shownCard;
     private CardSide side;
+    private GestureDetector gestureDetector;
+    private Integer Good=0,Bad=0;
+
+
+    @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +39,16 @@ public class CardLearningActivity extends AppCompatActivity {
         cards.add(new LearningCard("4","E",0.5));
         cards.add(new LearningCard("5","F",0.6));
 
+
+
+        gestureDetector = new GestureDetector(this, new GestureListener());
+
         side=CardSide.A;
         cardText = (TextView) findViewById(R.id.cardText);
+        goodCardNumber = (TextView) findViewById(R.id.goodCardNumber);
+        badCardNumber = (TextView) findViewById(R.id.badCardNumber);
+        goodCardNumber.setText(Good+"");
+        badCardNumber.setText(Bad+"");
        // cardChooser = new CardChooser(cards);
         shownCard= cards.firstElement();
         try {
@@ -46,30 +56,13 @@ public class CardLearningActivity extends AppCompatActivity {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Button skipBtn= (Button)findViewById(R.id.SkipBtn);
-
-        cardText.setOnClickListener(new View.OnClickListener() {
+        cardText.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                try {
-                    flipTheCard();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-        skipBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    skipTheCard();
-                 } catch (Exception e) {
-                    throw new RuntimeException(e);
-                 }
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
             }
         });
 
-        // Log.d("Activity on Create","LearningCard");
     }
 
     private void flipTheCard() throws Exception {
@@ -86,8 +79,93 @@ public class CardLearningActivity extends AppCompatActivity {
     private void skipTheCard() throws Exception {
         cards.remove(shownCard);
         cards.add(shownCard);
-        shownCard=cards.firstElement();
-        side=CardSide.A; // TODO: megcsinalni, hogy legyen default side.
-        cardText.setText(shownCard.getSide(side));
+        setNextCard();
+
+    }
+
+    private void GoodCard() throws Exception {
+        Good++;
+        cards.remove(shownCard);
+        setNextCard();
+    }
+
+    private void BadCard() throws Exception {
+        Bad++;
+        cards.remove(shownCard);
+        setNextCard();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private  void setNextCard() throws Exception {
+        //Ending
+        goodCardNumber.setText(Good+"");
+        badCardNumber.setText(Bad+"");
+        if (cards.size()<=0) {
+            //GameEnded.
+            cardText.setVisibility(View.GONE);
+        } else {
+            shownCard = cards.firstElement();
+            side = CardSide.A; // TODO: megcsinalni, hogy legyen default side.
+            cardText.setText(shownCard.getSide(side));
+        }
+    }
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+        private static final int SWIPE_THRESHOLD = 100;
+        private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+
+        @Override
+        public boolean onSingleTapUp(@NonNull MotionEvent e) {
+            try {
+                flipTheCard();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+            return super.onSingleTapUp(e);
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            float distanceX = e2.getX() - e1.getX();
+            float distanceY = e2.getY() - e1.getY();
+
+            if (Math.abs(distanceX) > Math.abs(distanceY)
+                    && Math.abs(distanceX) > SWIPE_THRESHOLD
+                    && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                // Right swipe
+                if (distanceX > 0) {
+                    try {
+                        GoodCard();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                // Left swipe
+                else {
+                    try {
+                        BadCard();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                return true;
+            } else if (Math.abs(distanceY) > Math.abs(distanceX)
+                    && Math.abs(distanceY) > SWIPE_THRESHOLD
+                    && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                    try {
+                        skipTheCard();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+            }
+
+            return false;
+        }
     }
 }
+
