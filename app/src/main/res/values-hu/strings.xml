@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Beadando</string>
+    <string name="StartLearningBtnText">Tanulás</string>
+    <string name="NewCardBtnText">Új kártya</string>
+    <string name="AsideTextView">Előlap</string>
+    <string name="BsideTextView">Hátlap</string>
+    <string name="SaveBtn">Mentés</string>
+    <string name="saveDone">Mentés sikerült</string>
+    <string name="Good">Tudtam</string>
+    <string name="Bad">Elfelejtettem</string>
+    <string name="Skip">Passz</string>
+</resources>

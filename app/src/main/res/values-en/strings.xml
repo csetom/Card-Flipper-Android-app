@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Card Flipper</string>
     <string name="StartLearningBtnText">Start Learning</string>
@@ -9,5 +10,4 @@
     <string name="Good">Good</string>
     <string name="Bad">Bad</string>
     <string name="Skip">Skip</string>
-    <string name="realmName" translatable="false">Learning Cards"</string>
 </resources>
