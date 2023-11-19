@@ -161,7 +161,7 @@ public class CardLearningActivity extends AppCompatActivity {
             cardText.setText("");
         } else {
             shownCard = cards.firstElement();
-            side = CardSide.A; // TODO: megcsinalni, hogy legyen default side.
+            side = CardSide.A;
             updateTextView();
         }
     }

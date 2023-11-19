@@ -19,12 +19,6 @@ public class LearningCard extends RealmObject {
         this.ASide = ASide;
         this.BSide = BSide;
         this.knowledge = knowledge;
-
-    }
-    public LearningCard(String ASide, String BSide, double knowledge) {
-        this.ASide = ASide;
-        this.BSide = BSide;
-        this.knowledge = knowledge;
     }
 
     public void setId(int id) {
@@ -35,7 +29,8 @@ public class LearningCard extends RealmObject {
         return id;
     }
 
-    public  LearningCard(){};
+    public  LearningCard(){}
+
     public String getASide() {
         return ASide;
     }
@@ -66,7 +61,7 @@ public class LearningCard extends RealmObject {
                 return getASide();
             case B:
                 return getBSide();
-        };
+        }
         throw new Exception("There is no other sides");
     }
 }

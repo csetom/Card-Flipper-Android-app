@@ -1,12 +1,11 @@
 package com.example.beadando;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import io.realm.Realm;
 
@@ -20,18 +19,8 @@ public class MainActivity extends AppCompatActivity {
         StartLearningBtn = (Button) findViewById(R.id.LearningBtn);
         Button NewCardBtn = findViewById(R.id.NewCardBtn);
 
-        StartLearningBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                StartLearningActivity();
-            }
-        });
-        NewCardBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                StartNewCard();
-            }
-        });
+        StartLearningBtn.setOnClickListener(v -> StartLearningActivity());
+        NewCardBtn.setOnClickListener(v -> StartNewCard());
         Realm.init(getApplicationContext());
     }
 
