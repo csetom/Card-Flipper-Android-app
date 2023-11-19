@@ -1,18 +1,32 @@
 package com.example.beadando.Cards;
 
-public class LearningCard {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
+
+public class LearningCard extends RealmObject {
+    @PrimaryKey
+    private int id;
+    @Required
     private String ASide;
+    @Required
     private String BSide;
     private double knowledge; /// 0 to 1, its a percent
 
 
-    public LearningCard(String ASide, String BSide, double knowledge) {
+    public LearningCard(int id, String ASide, String BSide, double knowledge) {
+        this.id=id;
         this.ASide = ASide;
         this.BSide = BSide;
         this.knowledge = knowledge;
 
     }
-
+    public LearningCard(String ASide, String BSide, double knowledge) {
+        this.ASide = ASide;
+        this.BSide = BSide;
+        this.knowledge = knowledge;
+    }
+    public  LearningCard(){};
     public String getASide() {
         return ASide;
     }

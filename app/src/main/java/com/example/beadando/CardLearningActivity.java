@@ -18,13 +18,20 @@ import com.example.beadando.Cards.LearningCard;
 
 import java.util.Vector;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
+
 public class CardLearningActivity extends AppCompatActivity {
-    private Vector<LearningCard> cards= new Vector<LearningCard>();
+    private Vector<LearningCard> cards;
     private  TextView cardText,goodCardNumber,badCardNumber;
     private  LearningCard shownCard;
     private CardSide side;
     private GestureDetector gestureDetector;
     private Integer Good=0,Bad=0;
+    Realm backgroundThreadRealm;
+    Animation flipForward ,flipBackward;
+
 
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
@@ -32,19 +39,19 @@ public class CardLearningActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_learning);
-        Log.d("info","Create Activity");
+        Log.v("info","Create Activity");
 
-        cards.add(new LearningCard("0qwe","asdasA",0.1));
-        cards.add(new LearningCard("1asd","asdB",0.2));
-        cards.add(new LearningCard("2","C",0.3));
-        cards.add(new LearningCard("3","D",0.4));
-        cards.add(new LearningCard("4","E",0.5));
-        cards.add(new LearningCard("5","F",0.6));
+        String realmName = getResources().getString(R.string.realmName);
+        RealmConfiguration config = new RealmConfiguration.Builder().name(realmName).build();
+        backgroundThreadRealm = Realm.getInstance(config);
 
 
+        cards = new Vector<LearningCard>(backgroundThreadRealm.where(LearningCard.class).findAll());
 
         gestureDetector = new GestureDetector(this, new GestureListener());
 
+        flipForward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.flip_forward);
+        flipBackward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.flip_backward);
         side=CardSide.A;
         cardText = (TextView) findViewById(R.id.cardText);
         goodCardNumber = (TextView) findViewById(R.id.goodCardNumber);
@@ -66,10 +73,15 @@ public class CardLearningActivity extends AppCompatActivity {
         });
 
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // the ui thread realm uses asynchronous transactions, so we can only safely close the realm
+        // when the activity ends and we can safely assume that those transactions have completed
+        backgroundThreadRealm.close();
+    }
     private void flipTheCard() {
         // Load forward and backward animations from XML
-        Animation flipForward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.flip_forward);
-        Animation flipBackward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.flip_backward);
 
 
         // Start the forward animation
@@ -176,7 +188,8 @@ public class CardLearningActivity extends AppCompatActivity {
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             float distanceX = e2.getX() - e1.getX();
             float distanceY = e2.getY() - e1.getY();
-            if (!cardText.getAnimation().hasEnded()) return false;
+            Animation cardAnimation=cardText.getAnimation();
+            if (cardAnimation!=null && !cardText.getAnimation().hasEnded()) return false;
             if (Math.abs(distanceX) > Math.abs(distanceY)
                     && Math.abs(distanceX) > SWIPE_THRESHOLD
                     && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {

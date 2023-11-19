@@ -8,19 +8,30 @@
 
 
     <Button
-        android:id="@+id/LearningBtn"
+        android:id="@+id/NewCardBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="159dp"
-        android:layout_marginTop="279dp"
         android:layout_marginEnd="161dp"
-        android:layout_marginBottom="404dp"
+        android:layout_marginBottom="100dp"
+        android:onClick="StartLearningActivity"
+        android:text="@string/NewCardBtnText"
+        app:layout_constraintBottom_toTopOf="@+id/LearningBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/LearningBtn"
+        android:layout_width="172dp"
+        android:layout_height="96dp"
+        android:layout_marginStart="159dp"
+        android:layout_marginEnd="161dp"
+        android:layout_marginBottom="340dp"
         android:onClick="StartLearningActivity"
         android:text="@string/StartLearningBtnText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.479"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,5 +3,10 @@
     <string name="FlipBtnText">Flip</string>
     <string name="SkipBtnText">Skip</string>
     <string name="StartLearningBtnText">Start Learning</string>
+    <string name="NewCardBtnText">New Card</string>
+    <string name="AsideTextView">Front Side</string>
+    <string name="BsideTextView">Back Side</string>
+    <string name="SaveBtn">Save</string>
+    <string name="realmName">Learning Cards"</string>
 
 </resources>
