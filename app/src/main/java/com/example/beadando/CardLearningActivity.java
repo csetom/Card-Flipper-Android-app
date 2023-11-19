@@ -1,8 +1,5 @@
 package com.example.beadando;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +9,10 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.beadando.Cards.CardSide;
 import com.example.beadando.Cards.LearningCard;
@@ -20,7 +21,6 @@ import java.util.Vector;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
 
 public class CardLearningActivity extends AppCompatActivity {
     private Vector<LearningCard> cards;
@@ -46,7 +46,7 @@ public class CardLearningActivity extends AppCompatActivity {
         backgroundThreadRealm = Realm.getInstance(config);
 
 
-        cards = new Vector<LearningCard>(backgroundThreadRealm.where(LearningCard.class).findAll());
+        cards = new Vector<>(backgroundThreadRealm.where(LearningCard.class).findAll());
 
         gestureDetector = new GestureDetector(this, new GestureListener());
 
@@ -65,12 +65,7 @@ public class CardLearningActivity extends AppCompatActivity {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        cardText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        });
+        cardText.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
 
     }
     @Override
@@ -100,7 +95,7 @@ public class CardLearningActivity extends AppCompatActivity {
                         break;
                     case B:
                         side=CardSide.A;
-                };
+                }
                 updateTextView();
                 cardText.startAnimation(flipBackward);
 
@@ -132,33 +127,38 @@ public class CardLearningActivity extends AppCompatActivity {
         cardText.setScaleY(1f);
     }
 
-    private void skipTheCard() throws Exception {
+    private void skipTheCard() {
+        Toast.makeText(getApplicationContext(),getResources().getText(R.string.Skip), Toast.LENGTH_SHORT).show();
         cards.remove(shownCard);
         cards.add(shownCard);
         setNextCard();
 
     }
 
-    private void GoodCard() throws Exception {
+    private void GoodCard() {
+        Toast.makeText(getApplicationContext(),getResources().getText(R.string.Good), Toast.LENGTH_SHORT).show();
         Good++;
         cards.remove(shownCard);
         setNextCard();
     }
 
-    private void BadCard() throws Exception {
+    private void BadCard() {
+        Toast.makeText(getApplicationContext(),getResources().getText(R.string.Bad), Toast.LENGTH_SHORT).show();
         Bad++;
         cards.remove(shownCard);
         setNextCard();
+
     }
 
     @SuppressLint("SetTextI18n")
-    private  void setNextCard() throws Exception {
+    private  void setNextCard() {
         //Ending
         goodCardNumber.setText(Good+"");
         badCardNumber.setText(Bad+"");
-        if (cards.size()<=0) {
+        if (cards.size() == 0) {
             //GameEnded.
             cardText.setVisibility(View.GONE);
+            cardText.setText("");
         } else {
             shownCard = cards.firstElement();
             side = CardSide.A; // TODO: megcsinalni, hogy legyen default side.
@@ -180,12 +180,13 @@ public class CardLearningActivity extends AppCompatActivity {
         }
 
         @Override
-        public boolean onDown(MotionEvent e) {
+        public boolean onDown(@NonNull MotionEvent e) {
             return true;
         }
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            assert e1 != null;
             float distanceX = e2.getX() - e1.getX();
             float distanceY = e2.getY() - e1.getY();
             Animation cardAnimation=cardText.getAnimation();

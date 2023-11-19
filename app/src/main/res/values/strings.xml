@@ -1,12 +1,13 @@
 <resources>
     <string name="app_name">Beadando</string>
-    <string name="FlipBtnText">Flip</string>
-    <string name="SkipBtnText">Skip</string>
     <string name="StartLearningBtnText">Start Learning</string>
     <string name="NewCardBtnText">New Card</string>
     <string name="AsideTextView">Front Side</string>
     <string name="BsideTextView">Back Side</string>
     <string name="SaveBtn">Save</string>
     <string name="realmName">Learning Cards"</string>
-
+    <string name="saveDone">New Card is saved</string>
+    <string name="Good">Good</string>
+    <string name="Bad">Bad</string>
+    <string name="Skip">Skip</string>
 </resources>

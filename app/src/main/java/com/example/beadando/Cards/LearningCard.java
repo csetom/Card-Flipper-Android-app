@@ -26,6 +26,15 @@ public class LearningCard extends RealmObject {
         this.BSide = BSide;
         this.knowledge = knowledge;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
     public  LearningCard(){};
     public String getASide() {
         return ASide;
